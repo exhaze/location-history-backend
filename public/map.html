@@ -18,19 +18,32 @@
 <div id='map'></div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript">
-var map = L.mapbox.map('map', 'examples.map-9ijuk24y')
-	.setView({ lat: 37.32792156, lon: -122.01982441 }, 10);
+var map = L.mapbox.map('map', 'examples.map-9ijuk24y');
+var FaceIcon = L.Icon.extend({
+    options: {
+        iconSize:     [30, 42],
+        iconAnchor:   [22, 94],
+        shadowAnchor: [4, 62],
+        popupAnchor:  [-3, -76]
+    }
+});
+
+var faceIcon = new FaceIcon({ iconUrl: '/face.png' });
 
 var socket = io.connect();
 socket.on('location', function(location) {
-	L.marker(location).addTo(map);
+    map.setView(location);
+	L.marker(location, {icon: faceIcon}).addTo(map);
 });
 
 // load up some recent locations
 $(document).ready(function() {
 	$.getJSON('/locations', function(locations) {
+        if (locations && locations.length > 0) {
+            map.setView({ lat: locations[0].latitude, lon: locations[0].longitude }, 15);
+        }
 		locations.forEach(function(location) {
-			L.marker({ lat: location.latitude, lon: location.longitude }).addTo(map);
+			L.marker({ lat: location.latitude, lon: location.longitude }, {icon: faceIcon}).addTo(map);
 		});
 	});
 });
