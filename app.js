@@ -33,6 +33,10 @@ db.sequelize.sync()
         next();
     });
 
+    app.get('/', function(req, res, next) {
+        res.redirect('/map.html');
+    });
+
     app.get('/locations', locations.list);
     app.post('/locations', locations.create);
 
