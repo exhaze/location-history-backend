@@ -23,7 +23,9 @@ var config = {
 		logging: console.log,
 		connections: 20,
 		maxIdleTime: 30
-	}
+	},
+
+	token: process.env.TOKEN
 };
 
 module.exports = config;

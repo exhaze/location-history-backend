@@ -6,10 +6,21 @@ var http = require('http');
 var path = require('path');
 var socketIo = require('socket.io');
 var db = require('./db');
+var config = require('./config');
 
 var app = express();
 
 var io;
+
+// auth middleware
+var auth = function(req, res, next) {
+    if (!req.headers.token ||
+        req.headers.token != config.token) {
+        return res.json(403, { error: { message: 'Invalid auth token' } });
+    }
+
+    next();
+}
 
 db.sequelize.sync()
 .then(function() {
@@ -38,7 +49,7 @@ db.sequelize.sync()
     });
 
     app.get('/locations', locations.list);
-    app.post('/locations', locations.create);
+    app.post('/locations', auth, locations.create);
 
     app.set('port', process.env.PORT || 8000);
 
