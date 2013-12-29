@@ -30,7 +30,7 @@ module.exports = {
 	},
 
 	list: function(req, res, next) {
-		Locations.findAll({ limit: 50 })
+		Locations.model.findAll({ limit: 50 })
 		.then(function(locations) {
 			res.json(200, locations);
 		},
