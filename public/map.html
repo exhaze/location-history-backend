@@ -21,7 +21,7 @@
 var map = L.mapbox.map('map', 'examples.map-9ijuk24y')
 	.setView({ lat: 37.32792156, lon: -122.01982441 }, 10);
 
-var socket = io.connect('http://localhost');
+var socket = io.connect();
 socket.on('location', function(location) {
 	L.marker(location).addTo(map);
 });
